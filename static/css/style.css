@@ -1,0 +1,52 @@
+body{
+    background-color: black;
+}
+
+#controller{
+    background-color: #cecece;
+    max-width: 70%;
+    height: 100%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.button{
+    background-color: papayawhip;
+    border-radius: 10px;
+    width: 42%;
+    padding: 5% 10%;
+    font-size: 20pt;
+    margin: 10px 10px;
+    box-shadow: 2px 2px papayawhip;
+}
+
+#preview{
+    text-align: center;
+    position: relative;
+    width: 100%;
+    left: 50%;
+    -webkit-transform: translate(-50%,0);
+    transform: translate(-50%,0);
+}
+
+.frame{
+    
+    width: 100%;
+    height: auto;
+    z-index : 0
+}
+
+.led{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 60%;
+    -webkit-transform: translate(-50%,-45%);
+    transform: translate(-50%,-50%);
+    z-index: 1;
+}
+
+#change_image, #change_brightness{
+    width: 100%;
+    text-align: center;
+}
