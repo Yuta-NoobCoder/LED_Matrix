@@ -41,23 +41,39 @@ if __name__ == "__main__":
     options.pwm_lsb_nanoseconds = 100
     matrix = RGBMatrix(options = options)
 
-    #管理ページのアドレスを表示
-    ip = ipget.ipget()
-    plt = Image.new('RGB', (128,32), (0,0,0))
-    plt.paste(make_string_image("管理ページ:", (255,160,0)), (20,0))
-    plt.paste(make_string_image(ip.ipaddr('wlan0').split('/')[0], (181, 255, 0)), (16,16))
-    matrix.SetImage(plt)
-    wait = input()
-
+    #USBメモリの読み込み
     flist = list()
     for file in os.listdir('/media/usb0'):
         name, ext = os.path.splitext(file)
         if ext == '.png' or ext == '.bmp' or ext == '.jpg' or ext == '.gif':
             flist.append(file)
+    
+    index = 0    
     while True:
-        for file in flist:
-            img = Image.open("/media/usb0/" + file).convert('RGB')
+
+        cmd = input() #Flask(router.py)から標準入力で受ける
+        
+        if cmd == "addr":
+            ip = ipget.ipget()
+            plt = Image.new('RGB', (128,32), (0,0,0))
+            plt.paste(make_string_image("コントローラー:", (255,160,0)), (20,0))
+            plt.paste(make_string_image(ip.ipaddr('wlan0').split('/')[0], (181, 255, 0)), (16,16))
+            matrix.SetImage(plt)
+            index = -1
+
+        elif cmd == "next" or cmd == "prev":
+            if cmd == "next":
+                index += 1
+                if index > len(flist) - 1:
+                    index = 0
+            if cmd == "prev":
+                index -= 1
+                if index < 0:
+                    index = len(flist) - 1
+
+            img = Image.open("/media/usb0/" + flist[index]).convert('RGB')
             img = shape_image(img)
             matrix.SetImage(img)
-            skip = input()
-    
+        
+        elif cmd == "image":
+            print("/media/usb0/" + flist[index])
