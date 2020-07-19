@@ -1,5 +1,5 @@
 from PIL import Image, ImageDraw, ImageFont, ImageChops
-from rgbmatrix import RGBMatrix, RGBMatrixOptions, graphics
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
 import sys
 import os
 import ipget
@@ -7,7 +7,7 @@ import subprocess
 import time
 
 #画像を128 * 32に正規化
-def shapeImage(img):
+def shape_image(img):
     img = img.resize((128, 32), Image.NONE)
     r, g, b = img.split()
     src = (51,51,51)
@@ -20,7 +20,7 @@ def shapeImage(img):
     return img
 
 #文字画像を生成
-def makeImage(text, color):
+def make_string_image(text, color):
     imgOut = Image.new('RGB', (128,16), (0, 0, 0))
     imgStr = Image.new('1', (128, 16), 0)
     font = ImageFont.truetype("fonts/JF-Dot-Izumi16B.ttf",16)
@@ -30,6 +30,8 @@ def makeImage(text, color):
     return imgOut
 
 if __name__ == "__main__":
+
+    #マトリクスの初期化
     options = RGBMatrixOptions()
     options.hardware_mapping = 'adafruit-hat'
     options.rows=32
@@ -37,15 +39,15 @@ if __name__ == "__main__":
     options.brightness = 50
     options.gpio_slowdown=4
     options.pwm_lsb_nanoseconds = 100
-    matrix = RGBMatrix(options = options) 
+    matrix = RGBMatrix(options = options)
+
     #管理ページのアドレスを表示
     ip = ipget.ipget()
     plt = Image.new('RGB', (128,32), (0,0,0))
-    plt.paste(makeImage("管理ページ:", (255,160,0)), (20,0))
-    plt.paste(makeImage(ip.ipaddr('wlan0').split('/')[0], (181, 255, 0)), (16,16))
+    plt.paste(make_string_image("管理ページ:", (255,160,0)), (20,0))
+    plt.paste(make_string_image(ip.ipaddr('wlan0').split('/')[0], (181, 255, 0)), (16,16))
     matrix.SetImage(plt)
     wait = input()
-
 
     flist = list()
     for file in os.listdir('/media/usb0'):
@@ -55,14 +57,7 @@ if __name__ == "__main__":
     while True:
         for file in flist:
             img = Image.open("/media/usb0/" + file).convert('RGB')
-            img = shapeImage(img)
+            img = shape_image(img)
             matrix.SetImage(img)
             skip = input()
-    while True:
-        plt = Image.new('RGB', (128,32), (0,0,0))
-        plt.paste(makeImage("画像が見つかりません", (255,160,0)), (0,0))
-        plt.paste(makeImage("USBメモリを確認してください", (255,160,0)), (0,16))
-        matrix.SetImage(plt)
-        time.sleep(1)
-
     

@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file
 import subprocess
 import sys
 
@@ -11,9 +11,14 @@ def main():
     return render_template("index.html")
 
 @app.route('/next')
-def next():
+def next_image():
     print("next", file=proc.stdin, flush=True) 
-    return "Moved to the next image."
+    return ""
+
+@app.route('/image')
+def get_image():
+    
+
 
 if __name__ == "__main__":
     app.run()
