@@ -2,7 +2,7 @@ from flask import Flask, render_template, send_file, request
 import subprocess
 import sys
 import base64
-from io import BytesIO
+
 
 app = Flask(__name__)
 
@@ -41,10 +41,10 @@ def controll_rollsign():
         proc.stdin.write("next\n")
     elif action_type == "prev":
         proc.stdin.write("prev\n")
+    elif action_type == "image":
+        proc.stdin.write("image\n")
+
     proc.stdin.flush()
 
-    # イメージのpathから読み込み・Base64エンコード
-    file = str(proc.stdout.readline()).rstrip('\n')
-    with open(file, 'rb') as f:
-        base64_image = base64.b64encode(f.read())
-    return base64_image
+    return proc.stdout.readline()
+
