@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/css/style.css">
+</head>
+
+<body>
+    <title>
+        方向幕コントローラー
+    </title>
+    <div id="controller">
+        <div id="preview">
+            <img id="led" src = {{src}}/>
+        </div>
+
+        <div id="change_image">
+            <input type="button" id = "next" class="button" value="次の画像へ">
+            <input type="button" id = "prev" class="button" value="前の画像へ">
+        </div>
+
+        <div id="option">
+            <input type="checkbox" checked>自動で切り替える
+            <input type="text" value = 30>
+            <select id = "duration">
+                <option value = "sec">秒</option>
+                <option value = "min">分</option>
+            </select>
+            <label for="duration">間隔</label>
+        </div>
+    </div>
+    <script src="/static/js/index.js"></script>
+</body>
+
+</html>

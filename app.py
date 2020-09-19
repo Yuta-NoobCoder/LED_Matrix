@@ -3,9 +3,7 @@ import subprocess
 import sys
 import base64
 
-
 app = Flask(__name__)
-
 
 proc = subprocess.Popen(
     ['sudo', 'python3', 'controll_panel.py'],
@@ -14,11 +12,9 @@ proc = subprocess.Popen(
     stdout=subprocess.PIPE
 )
 
-
 @app.route('/')
 def main():
     pass
-
 
 @app.route('/signboard')
 def signboard():
@@ -27,7 +23,11 @@ def signboard():
 
 @app.route('/rollsign')
 def rollsign():
-    return render_template("index.html")
+    #最初の画像を取得
+    proc.stdin.write("image\n")
+    proc.stdin.flush()
+    image_url = proc.stdout.readline().rstrip("\n")
+    return render_template("index.html", src=image_url)
 
 
 @app.route('/rollsign/action')
