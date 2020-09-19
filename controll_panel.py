@@ -10,8 +10,7 @@ import base64
 
 images_dir = "images"
 
-def shape_image(image):
-    image = image.resize((128, 32), Image.NONE)
+def remove_background(image):
     r, g, b = image.split()
     src = (51, 51, 51)
     r = r.point(lambda p: 1 if p == src[0] else 0, mode="1")
@@ -62,25 +61,9 @@ if __name__ == "__main__":
     index = 0
     while True:
 
-        cmd = input()  # Flask(router.py)から標準入力で受ける
-
-        """
-        if cmd == "addr":
-            ip = ipget.ipget()
-            plt = Image.new('RGB', (128, 32), (0, 0, 0))
-            plt.paste(make_string_image("コントローラー:", (255, 160, 0)), (20, 0))
-            plt.paste(make_string_image(
-                ip.ipaddr('wlan0').split('/')[0], (181, 255, 0)), (16, 16))
-            matrix.SetImage(plt)
-            index = -1
-        """
-
-        #画像の読み込み
-        image_path = os.path.join(images_dir, flist[index]) 
-        image = Image.open(image_path).convert('RGB')
+        cmd = input()  # Flask(app.py)から標準入力で受ける
         
         if cmd == "next" or "prev":
-            
             if cmd == "next":
                 index += 1
                 if index > len(flist) - 1:
@@ -89,10 +72,20 @@ if __name__ == "__main__":
                 index -= 1
                 if index < 0:
                     index = len(flist) - 1
-
+            
+            #画像の読み込み
+            image_path = os.path.join(images_dir, flist[index])
+            image = Image.open(image_path).convert('RGB')
+            #画像をbase64エンコードしてFlaskへ
             print(image2base64(image))
-            image = shape_image(image)
+            #画像の縮小・背景除去
+            image = image.resize((128, 32), Image.NONE)
+            image = remove_background(image)
             matrix.SetImage(image)
 
         elif cmd == "image":
+            #画像の読み込み
+            image_path = os.path.join(images_dir, flist[index]) 
+            image = Image.open(image_path).convert('RGB')
+            #画像をbase64エンコードしてFlaskへ
             print(image2base64(image))

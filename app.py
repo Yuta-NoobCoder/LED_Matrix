@@ -27,8 +27,6 @@ def signboard():
 
 @app.route('/rollsign')
 def rollsign():
-    proc.stdin.write("next\n")
-    proc.stdin.flush()
     return render_template("index.html")
 
 
@@ -46,5 +44,5 @@ def controll_rollsign():
 
     proc.stdin.flush()
 
-    return proc.stdout.readline()
+    return proc.stdout.readline().rstrip("\n")
 
