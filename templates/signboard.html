@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="static/css/signboard.css">
+</head>
+
+<body>
+    <title>
+        電光掲示板コントローラー
+    </title>
+    <div id="controller">
+        <div id="preview">
+                <p id = "row1">12:45 快速 上野</p>
+                <p id = "row2">米アップルは、今月15日にイベントを開催すると発表した。詳細は明らかにしていないが、同社は例年9月にiPhoneなどの新機種を発表している。5Gに対応した新型iPhoneが発表されるか注目。</p>
+        </div>
+        <div id = "input_row1">
+            <textarea id = "text"></textarea>
+            <form id = "radio">
+                <input type="radio" name = "color" value="green">緑
+                <input type="radio" name = "color" value="orange">橙
+                <input type="radio" name = "color" value="red">赤
+                <input type="radio" name = "color" value="other">
+            </form>
+            <input type="button" id = "button" value="範囲取得">
+        </div>
+        <div id = "input_row2">
+
+        </div>
+    </div>
+    <script src="/static/js/signboard.js"></script>
+</body>
+
+</html>
