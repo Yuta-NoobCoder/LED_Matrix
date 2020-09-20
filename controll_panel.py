@@ -51,7 +51,7 @@ if __name__ == "__main__":
     options.pwm_lsb_nanoseconds = 100
     matrix = RGBMatrix(options=options)
 
-    # USBメモリの読み込み
+    # ディレクトリ内の画像を検索
     flist = []
     for file in os.listdir(images_dir):
         name, ext = os.path.splitext(file)
