@@ -1,0 +1,74 @@
+body{
+    background-color: black;
+}
+
+#controller{
+    /*常に画面中心に表示*/
+    position:absolute;
+    top : 50%;
+    left : 50%;
+    transform: translate(-50%, -50%);
+
+    width: 800px;
+    height : 700px;
+    background-color: #d0d0d0;
+    border-radius: 10px;
+    box-shadow : 0 0 10px #d0d0d0;
+    margin-left: auto;
+    margin-right: auto;
+    text-align : center;
+}
+
+#preview{
+    display: inline-block;
+    background-color: black;
+    width : 700px;
+    height: 215px;
+    border: solid 2px #555555;
+    margin-top: 40px;
+    margin-bottom : 20px;
+    overflow : hidden;
+}
+
+#preview p{
+    font-size : 92px;
+    /*font-family: dot;*/
+    color: rgb(255, 160, 0);
+    margin:0;
+    padding : 0;
+    height : 110px;
+    line-height: 110px;
+    text-align : left;
+    white-space: nowrap;
+}
+
+#row2{
+    white-space: nowrap;
+    display : inline-block;
+    animation-name:scroll; 
+    animation-timing-function:linear;
+    animation-duration:15s; 
+}
+
+#input_row1{
+    display : inline-block;
+    text-align: left;
+    width: 700px;
+}
+
+textarea{
+    background-color: black;
+    color:rgb(255, 160, 0);
+    width : 350px;
+    height : 100px;
+}
+
+@keyframes scroll {
+	from   { transform: translate(0%);} 
+	99%,to { transform: translate(-100%);}
+	}
+
+@font-face {
+    font-family: 'dot';
+    src: url(../fonts/JF-Dot-Izumi16.ttf);
+}
