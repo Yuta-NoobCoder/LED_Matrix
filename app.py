@@ -14,7 +14,7 @@ proc = subprocess.Popen(
 
 @app.route('/')
 def main():
-    pass
+    return render_template("index.html")
 
 @app.route('/signboard')
 def signboard():
@@ -27,7 +27,7 @@ def rollsign():
     proc.stdin.write("image\n")
     proc.stdin.flush()
     image_url = proc.stdout.readline().rstrip("\n")
-    return render_template("index.html", src=image_url)
+    return render_template("rollsign.html", src=image_url)
 
 
 @app.route('/rollsign/action')
