@@ -1,27 +1,14 @@
 <!DOCTYPE html>
 <html>
-
-<head>
-    <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" href="static/css/style.css">
-</head>
-
-<body>
-    <div id="controller">
-        <div id="preview">
-            <img id="frame" src="static/img/panel.png" />
-            <img id="led" src = ""/>
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/css/index.css">
+    </head>
+    <body>
+        <div id="controller">
+            <input type="button" id = "btn_shutdown" class="button" value="電源を切る">
+            <input type="button" id = "btn_rollsign" class="button" value="方向幕モード">
+            <input type="button" id = "btn_signboard" class="button" value="電光掲示板モード"> 
         </div>
-        <div id="change_image">
-            <input type="button" id="next" class="button" value="次の画像へ">
-            <input type="button" id="prev" class="button" value="前の画像へ">
-        </div>
-        <div id="change_brightness">
-            <input type="button" id="bright+" class="button" value="輝度 + ">
-            <input type="button" id="bright-" class="button" value="輝度 - ">
-        </div>
-    </div>
-    <script src="/static/js/index.js"></script>
-</body>
-
+        <script src="/static/js/index.js"></script>
+    </body>
 </html>
