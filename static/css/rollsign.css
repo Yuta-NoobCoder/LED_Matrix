@@ -3,49 +3,44 @@ body{
 }
 
 #controller{
-    background-color: #cecece;
-    max-width: 70%;
-    height: 100%;
+    /*常に画面中心に表示*/
+    position:absolute;
+    top : 50%;
+    left : 50%;
+    transform: translate(-50%, -50%);
+
+    width: 800px;
+    height : 700px;
+    border-radius : 10px;
+    background-color: #d0d0d0;
+    box-shadow : 0 0 10px #d0d0d0;
     margin-left: auto;
     margin-right: auto;
-}
-
-.button{
-    background-color: papayawhip;
-    border-radius: 10px;
-    width: 42%;
-    padding: 5% 10%;
-    font-size: 20pt;
-    margin: 10px 10px;
-    box-shadow: 2px 2px papayawhip;
+    text-align: center;
 }
 
 #preview{
-    text-align: center;
-    position: relative;
-    width: 100%;
-    left: 50%;
-    -webkit-transform: translate(-50%,0);
-    transform: translate(-50%,0);
+    display: inline-block;
+    background-color: #333333;
+    width : 700px;
+    border: solid 2px #555555;
+    border-radius: 20px;
+    margin-top: 40px;
+    margin-bottom : 20px;
 }
 
-#frame{
-    width: 100%;
-    height: auto;
-    z-index : 0
+.button{
+    width : 700px;
+    height : 150px;
+    font-size: 50px;
+    margin: 10px;
 }
 
 #led{
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 60%;
-    -webkit-transform: translate(-50%,-45%);
-    transform: translate(-50%,-50%);
-    z-index: 1;
+    margin:20px;
+    width: 650px;
 }
 
-#change_image, #change_brightness{
-    width: 100%;
-    text-align: center;
+#option{
+    margin: 10px;
 }
