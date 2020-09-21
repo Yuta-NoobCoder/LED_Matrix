@@ -21,13 +21,13 @@
         </div>
 
         <div id="option">
-            <input type="checkbox" checked>自動で切り替える
-            <input type="text" value = 30>
-            <select id = "duration">
+            <input type="checkbox" id="chk_auto_switch">自動で切り替える
+            <input type="text" id="txt_interval" value = 30>
+            <select id = "select_interval">
                 <option value = "sec">秒</option>
                 <option value = "min">分</option>
             </select>
-            <label for="duration">間隔</label>
+            <label id="lbl_interval" for="duration">間隔</label>
         </div>
     </div>
     <script src="/static/js/rollsign.js"></script>
