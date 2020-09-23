@@ -1,4 +1,4 @@
-from flask import Flask, render_template, send_file, request
+from flask import Flask, render_template, request
 import subprocess
 import sys
 import base64
@@ -12,9 +12,11 @@ proc = subprocess.Popen(
     stdout=subprocess.PIPE
 )
 
+
 @app.route('/')
 def main():
     return render_template("index.html")
+
 
 @app.route('/signboard')
 def signboard():
@@ -23,7 +25,7 @@ def signboard():
 
 @app.route('/rollsign')
 def rollsign():
-    #最初の画像を取得
+    # 最初の画像を取得
     proc.stdin.write("image\n")
     proc.stdin.flush()
     image_url = proc.stdout.readline().rstrip("\n")
@@ -35,14 +37,21 @@ def controll_rollsign():
 
     action_type = request.args.get("type")
 
-    if action_type == "next":
-        proc.stdin.write("next\n")
-    elif action_type == "prev":
-        proc.stdin.write("prev\n")
-    elif action_type == "image":
-        proc.stdin.write("image\n")
+    if action_type == "next" or action_type == "prev" or action_type == "image":
 
-    proc.stdin.flush()
+        if action_type == "next":
+            proc.stdin.write("next\n")
+        elif action_type == "prev":
+            proc.stdin.write("prev\n")
+        elif action_type == "image":
+            proc.stdin.write("image\n")
 
-    return proc.stdout.readline().rstrip("\n")
+        proc.stdin.flush()
+        return proc.stdout.readline().rstrip("\n")
 
+    elif action_type == "leave":
+        interval = request.args.get("interval")
+        if interval:
+            proc.stdin.write("auto_switch," + interval)
+            proc.stdin.flush()
+        return '', 204  # コンテンツなし
