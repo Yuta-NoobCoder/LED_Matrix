@@ -6,29 +6,33 @@ var select_interval = document.getElementById("select_interval"); //単位
 var lbl_interval = document.getElementById("lbl_interval");
 var current_image = document.getElementById("led");
 
-btn_next.addEventListener('click', function(){
+window.onbeforeunload = function () {
+    xhr("/rollsign/action?type=leave")
+}
+
+
+btn_next.addEventListener('click', function () {
     xhr("/rollsign/action?type=next");
 });
 
-btn_prev.addEventListener('click', function(){
+btn_prev.addEventListener('click', function () {
     xhr("/rollsign/action?type=prev");
 });
 
 var timer;
-chk_auto_switch.addEventListener('change', function(){
-    if(chk_auto_switch.checked == true)
-    {
+chk_auto_switch.addEventListener('change', function () {
+    if (chk_auto_switch.checked == true) {
         txt_interval.disabled = false;
         select_interval.disabled = false;
         lbl_interval.style.opacity = 1.0;
         //タイマーをスタート
-        timer = setInterval(function(){
+        var interval = txt_interval.value * 1000; //秒換算
+        if (select_interval.value = "min") interval *= 60;
+        timer = setInterval(function () {
             xhr("/rollsign/action?type=next");
-        }, txt_interval.value * 1000);
-        console.log(txt_interval.value * 1000);
+        }, interval);
     }
-    else
-    {
+    else {
         txt_interval.disabled = true;
         select_interval.disabled = true;
         lbl_interval.style.opacity = 0.5;
@@ -37,11 +41,10 @@ chk_auto_switch.addEventListener('change', function(){
     }
 });
 
-function xhr(path){
+function xhr(path) {
     var request = new XMLHttpRequest();
     request.open('GET', path, true);
-    request.onload = function(){
-        console.log(request.responseText);
+    request.onload = function () {
         current_image.src = request.responseText;
     }
     request.send();
