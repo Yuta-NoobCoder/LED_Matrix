@@ -10,7 +10,6 @@ window.onbeforeunload = function () {
     xhr("/rollsign/action?type=leave")
 }
 
-
 btn_next.addEventListener('click', function () {
     xhr("/rollsign/action?type=next");
 });
@@ -27,7 +26,7 @@ chk_auto_switch.addEventListener('change', function () {
         lbl_interval.style.opacity = 1.0;
         //タイマーをスタート
         var interval = txt_interval.value * 1000; //秒換算
-        if (select_interval.value = "min") interval *= 60;
+        if (select_interval.value == "min") interval *= 60;
         timer = setInterval(function () {
             xhr("/rollsign/action?type=next");
         }, interval);
@@ -40,6 +39,7 @@ chk_auto_switch.addEventListener('change', function () {
         clearInterval(timer);
     }
 });
+
 
 function xhr(path) {
     var request = new XMLHttpRequest();
