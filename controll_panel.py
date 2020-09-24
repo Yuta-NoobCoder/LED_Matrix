@@ -109,15 +109,15 @@ if __name__ == "__main__":
             matrix.SetImage(image)
 
         # 自動切り替えの有無
-        elif cmd.split(',')[0] == "auto_switch" or cmd == "manual":
+        elif cmd.split(',')[0] == "enable_auto" or cmd == "disable_auto":
 
-            if cmd.split(',')[0] == "auto_switch":
+            if cmd.split(',')[0] == "enable_auto":
                 interval = cmd.split(',')[1]
                 scheduler.reschedule_job(
                     "auto_switch", trigger="interval", seconds=int(interval))
                 scheduler.resume()
 
-            elif cmd == "manual":
+            elif cmd == "disable_auto":
                 scheduler.pause()
 
         elif cmd == "image":
