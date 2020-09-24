@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, make_response, jsonify
 import subprocess
 import sys
 import base64
@@ -49,9 +49,17 @@ def controll_rollsign():
         proc.stdin.flush()
         return proc.stdout.readline().rstrip("\n")
 
-    elif action_type == "leave":
+    elif action_type == "enable_auto":
         interval = request.args.get("interval")
         if interval:
-            proc.stdin.write("auto_switch," + interval)
+            proc.stdin.write("enable_auto," + interval + "\n")
             proc.stdin.flush()
-        return '', 204  # コンテンツなし
+            # コンテンツなし
+            response = make_response(jsonify(None), 204)
+        return response
+
+    elif action_type == "disable_auto":
+        proc.stdin.write("disable_auto\n")
+        proc.stdin.flush()
+        response = make_response(jsonify(None), 204)
+        return response
