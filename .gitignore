@@ -4,3 +4,4 @@
 *.gif
 images/
 static/fonts/
+__pycache__
