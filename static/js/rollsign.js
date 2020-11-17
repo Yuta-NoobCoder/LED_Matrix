@@ -10,37 +10,45 @@ var timer;
 var interval;
 var response;
 
-//読み込み時の自動切り替え処理
-window.onload = function () {
-    //チェック状態を反映
-    chk_auto_switch.checked = localStorage.checked;
+window.onload = function () 
+{
+    //初回アクセス時の要素の状態を保存
+    if (!localStorage.interval || !localStorage.checked)
+    {
+        localStorage.interval = "30";
+        localStorage.checked = "0";
+    }
+    //間隔を反映(分単位の場合は60倍)
     txt_interval.value = localStorage.interval;
-    if (chk_auto_switch.checked == true) {
-        //切り替え間隔
-        interval = txt_interval.value;
-        if (select_interval.value == "min") interval *= 60;
-        //自動切り替えを有効化
-        ajax("/rollsign/action?type=enable_auto&interval=" + interval);
-        //タイマーを起動
-        timer = setInterval(function () {
-            ajax("/rollsign/action?type=image");
-        }, interval * 1000);
+    if (select_interval.value == "min") interval *= 60;
+    //自動切り替えを有効化
+    if (parseInt(localStorage.checked)) 
+    {
+        //チェック状態を反映{
+        chk_auto_switch.checked = true;
+        ajax("/rollsign/action?type=enable_auto&interval=" + interval)
+        current_image.style.opacity = 0.5;
     }
 }
 
-btn_next.addEventListener('click', function () {
+btn_next.addEventListener('click', function () 
+{
     ajax("/rollsign/action?type=next");
 });
 
-btn_prev.addEventListener('click', function () {
+btn_prev.addEventListener('click', function () 
+{
     ajax("/rollsign/action?type=prev");
 });
 
-chk_auto_switch.addEventListener('change', function () {
+chk_auto_switch.addEventListener('change', function () 
+{
+    //切り替え間隔を保存
+    localStorage.interval = txt_interval.value;
+    console.log(localStorage.checked);
+
     if (chk_auto_switch.checked == true) {
-        //切り替え有無・間隔を保存
-        localStorage.checked = true;
-        localStorage.interval = txt_interval.value;
+        localStorage.checked = "1";
         //要素を有効化
         txt_interval.disabled = false;
         select_interval.disabled = false;
@@ -49,32 +57,35 @@ chk_auto_switch.addEventListener('change', function () {
         interval = txt_interval.value;
         if (select_interval.value == "min") interval *= 60;
         //自動切り替えを有効化
-        ajax("/rollsign/action?type=enable_auto&interval=" + interval);
-        //タイマーを起動
-        timer = setInterval(function () {
-            ajax("/rollsign/action?type=image");
-        }, interval * 1000);
+        ajax("/rollsign/action?type=enable_auto_switch&interval=" + interval);
+        //自動切り替え中はプレビュー未使用
+        current_image.style.opacity = 0.5;
     }
-    else {
+    else 
+    {
         //チェック状態を保存
-        localStorage.checked = false;
+        localStorage.checked = "0";
         //要素を無効化
         txt_interval.disabled = true;
         select_interval.disabled = true;
         lbl_interval.style.opacity = 0.5;
-        //タイマーを停止
-        ajax("/rollsign/action?type=disable_auto");
-        clearInterval(timer);
+        //プレビューを再開
+        current_image.style.opacity = 1.0;
+        ajax("/rollsign/action?type=disable_auto_switch");
+        ajax("/rollsign/action?type=image");
     }
 });
 
 
-function ajax(url) {
+function ajax(url) 
+{
     var request = new XMLHttpRequest();
     request.open('GET', url, true);
-    request.onload = function () {
+    request.onload = function () 
+    {
         //next,prev,imageコマンドでのみ画像を変更
-        if (request.responseText.indexOf("data:image") != -1) {
+        if (request.responseText.indexOf("data:image") != -1) 
+        {
             current_image.src = request.responseText;
         }
     }
