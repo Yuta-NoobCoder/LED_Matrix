@@ -1,36 +1,33 @@
 from flask import Flask, render_template, request, make_response, jsonify
-import subprocess
-import sys
-import base64
+from rgbmatrix import RGBMatrix, RGBMatrixOptions
+from apscheduler.schedulers.background import BackgroundScheduler
+from rollsign import Rollsign
+
+
+# マトリクスの初期化
+options = RGBMatrixOptions()
+options.hardware_mapping = 'adafruit-hat'
+options.rows = 32
+options.cols = 128
+options.brightness = 50
+options.gpio_slowdown = 4
+options.pwm_lsb_nanoseconds = 100
+matrix = RGBMatrix(options=options)
+
+rollsign = Rollsign(matrix)
+rollsign.set_images_dir("images")
+
+scheduler = BackgroundScheduler()
+scheduler.add_job(rollsign.next_image, "interval", seconds=30, id="auto_switch")
+scheduler.start(paused=True)
 
 app = Flask(__name__)
 
-proc = subprocess.Popen(
-    ['sudo', 'python3', 'controll_panel.py'],
-    encoding='utf8',
-    stdin=subprocess.PIPE,
-    stdout=subprocess.PIPE
-)
-
-
 @app.route('/')
-def main():
-    return render_template("index.html")
-
-
-@app.route('/signboard')
-def signboard():
-    return render_template("signboard.html")
-
-
-@app.route('/rollsign')
-def rollsign():
-    # 最初の画像を取得
-    proc.stdin.write("image\n")
-    proc.stdin.flush()
-    image_url = proc.stdout.readline().rstrip("\n")
-    return render_template("rollsign.html", src=image_url)
-
+def root():
+    # 最初の画像を表示・取得
+    rollsign.show()
+    return render_template("rollsign.html", src=rollsign.get_base64_image())
 
 @app.route('/rollsign/action')
 def controll_rollsign():
@@ -40,26 +37,24 @@ def controll_rollsign():
     if action_type == "next" or action_type == "prev" or action_type == "image":
 
         if action_type == "next":
-            proc.stdin.write("next\n")
+            rollsign.next_image()
         elif action_type == "prev":
-            proc.stdin.write("prev\n")
-        elif action_type == "image":
-            proc.stdin.write("image\n")
+            rollsign.prev_image()
+            
+        return rollsign.get_base64_image()
 
-        proc.stdin.flush()
-        return proc.stdout.readline().rstrip("\n")
+    elif action_type == "enable_auto_switch":
 
-    elif action_type == "enable_auto":
         interval = request.args.get("interval")
-        if interval:
-            proc.stdin.write("enable_auto," + interval + "\n")
-            proc.stdin.flush()
-            # コンテンツなし
-            response = make_response(jsonify(None), 204)
+        scheduler.reschedule_job(
+            "auto_switch", trigger="interval", seconds=int(interval))
+        scheduler.resume()
+        # コンテンツなし
+        response = make_response(jsonify(None), 204)
         return response
 
-    elif action_type == "disable_auto":
-        proc.stdin.write("disable_auto\n")
-        proc.stdin.flush()
+    elif action_type == "disable_auto_switch":
+        
+        scheduler.pause()
         response = make_response(jsonify(None), 204)
         return response
